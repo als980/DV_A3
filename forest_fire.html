@@ -158,7 +158,7 @@
         "translate(" + (width / 2) + " ," +
         (height + margin.top + 20) + ")")
       .style("text-anchor", "middle")
-      .text("relative humidity in %: 15.0 to 100");
+      .text("relative humidity in %");
     // Add X axis
     svg1.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -214,7 +214,11 @@
         "translate(" + (width / 2) + " ," +
         (height + margin.top + 20) + ")")
       .style("text-anchor", "middle")
-      .text("relative humidity in %: 15.0 to 100");
+      .text("relative humidity in %");
+    var x = d3.scaleLinear()
+      .domain([10, 100])
+      .range([0, width]);
+    
     // Add X axis
     svg2.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -223,7 +227,7 @@
 
     // Add Y axis
     var y = d3.scaleLinear()
-      .domain([0, 40])
+      .domain([0, 35])
       .range([height, 0]);
 
     // text label for the y axis
