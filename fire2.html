@@ -1,0 +1,172 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 100px;
+  height: 35px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+}
+</style>
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz" style="border: 1px solid gold; float: left; width: 450;"></div>
+<div id="my_dataviz1" style="border: 1px solid red; float: left; width: 450;"></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+var svg1 = d3.select("#my_dataviz1")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+d3.csv("forestfires.csv", function(data) {
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 40])
+    .range([ 0, width ]);
+
+  // text label for the x axis
+  svg.append("text")
+      .attr("transform",
+            "translate(" + (width/2) + " ," +
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("the temperature in Celsius degrees");
+  // Add X axis
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 1100])
+    .range([ height, 0]);
+
+  // text label for the y axis
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("the burned area of the forest (in ha)");
+// Add Y axis
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+
+  // add the dots with tooltips
+  // Add dots
+  svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return x(d.temp); } )
+      .attr("cy", function (d) { return y(d.area); } )
+      .attr("r", 5)
+      .style("fill", function(d){
+        if (d.area >150) {return "red"}
+        else {return "#69b5a2"}})
+      .on("mouseover", function(d){
+        div.transition()
+        .duration(200)
+        .style("opacity", .9);
+      div .html(
+        "temp: "+d.temp + "<br/>area: "+d.area)
+        .style("left",(d3.event.pageX)+"px")
+        .style("top", (d3.event.pageY-28)+"px");
+      })
+//////////////////////////////////////////////
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 100])
+    .range([ 0, width ]);
+
+  // text label for the x axis
+  svg1.append("text")
+      .attr("transform",
+            "translate(" + (width/2) + " ," +
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("!!!!!!!!!!!!xxxxxxx!!!!!!!!!!!!!!!!");
+  // Add X axis
+  svg1.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 1100])
+    .range([ height, 0]);
+
+  // text label for the y axis
+  svg1.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("the burned area of the forest (in ha)");
+  // Add Y axis
+  svg1.append("g")
+    .call(d3.axisLeft(y));
+        // add the dots with tooltips
+        // Add dots
+      svg1.append('g')
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+          .attr("cx", function (d) { return x(d.RH); } )
+          .attr("cy", function (d) { return y(d.area); } )
+          .attr("r", 5)
+          .style("fill", function(d){
+            if (d.area >150) {return "red"}
+            else {return "#69b5a2"}})
+          .on("mouseover", function(d){
+            div.transition()
+            .duration(200)
+            .style("opacity", .9);
+          div .html(
+            "RH: "+d.RH + "<br/>area: "+d.area)
+            .style("left",(d3.event.pageX)+"px")
+            .style("top", (d3.event.pageY-28)+"px");
+          })
+})
+
+</script>
